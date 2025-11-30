@@ -43,15 +43,13 @@ def myID():
 # generate the y values
 
 """
-The following code creates the x and y value arrays, with the commented out code left for testing purposes to ensure that the arrays have been created properly.
+The following code creates the x and y value arrays.
 """
-x = np.arange(0,10.1,0.1)
- # print(x)
+x = np.arange(0,10.1,0.1) # from 0-10 inclusive in steps of 0.1
 y = myfunction(x)
- # print(y)
 
 """
-The following code creates a graph with linewidth lw and adds the x-axis, y-axis and title specified. The file is saved and the show file command has been commented out as this code was for testing purposes during development.
+The following code creates a graph with linewidth lw and adds the x-axis, y-axis and title specified. The file is saved and the show file command has been commented out.
 """
 lw = 2
 plt.clf() # clears the plot (source: https://www.activestate.com/resources/quick-reads/how-to-clear-a-plot-in-python/)
@@ -77,18 +75,16 @@ def numdiff(h, y):
     dy = [] # creates an empty PYTHON list, as appending to numpy arrays is inefficient (creates a new array everytime), for the first derivative approximations
     ddy = [] # creates another empty list, this time for the second derivative approximations
     
-    """The following loop appends the interior values of dy and ddy to their respective lists. The commented out print statements are for testing during development."""
+    """
+    The following loop appends the interior values of dy and ddy to their respective lists.
+    """
     for n in range(1,numElements-1,1):
         dy.append((y[n+1] - y[n-1])/(2*h))
         ddy.append((y[n+1]-(2*y[n])+y[n-1])/(h**2))
-         # print(f'This is dy {dy}')
-         # print(f'This is ddy {ddy}')
-     # print("first set of dys with no endpoints")
-     # print(dy)
-     # print("first set of ddys with no endpoints")
-     # print(ddy)
 
-    """The following loop adds the end cases to the dy and ddy lists. The commented print statements are for testing during development."""
+    """
+    The following loop adds the end cases to the dy and ddy lists.
+    """
     dyFirstValue = (-y[2]+(4*y[1])-(3*y[0]))/(2*h)
     ddyFirstValue = (-y[3]+(4*y[2])-(5*y[1])+(2*y[0]))/(h**2)
     dyLastValue = ((3*y[n])-(4*y[n-1])+y[n-2])/(2*h)
@@ -97,11 +93,6 @@ def numdiff(h, y):
     ddy.insert(0,ddyFirstValue)
     dy.append(dyLastValue)
     ddy.append(ddyLastValue)
-
-     # print("final dy")
-     # print(dy)
-     # print("final ddy")
-     # print(ddy)
 
     return dy, ddy # returns the lists dy and ddy
 
@@ -119,18 +110,12 @@ xValues = [1,2,3,4,5,6,7,8,9,10] # an array of predetermined x-values
 yValues = [] # an empty array which will be populated with the corresponding y-values
 
 """
-The following loop populates the yValues array with the appropriate y values. The commented out print statements are for testing during development.
+The following loop populates the yValues array with the appropriate y values.
 """
 for n in range(len(xValues)):
     yValues.append(g(xValues[n]))
-
- # print("___________")
- # print(xValues)
- # print(yValues)
  
 dy, ddy = numdiff(1,yValues) # the return values of the numdiff function are stored in the variables dy and ddy respectively
- # print(dy)
- # print(ddy)
 
 """
 The following functions define the actual first and second derivatives for my function g(x)
@@ -152,21 +137,6 @@ for a in range(len(xValues)): # this loop populated the dyActualValues and ddyAc
     ddyActualValues.append(ddyActual(xValues[a]))
 
 
- # print("-------------------------")
- # print("-------------------------")
- # print("-------------------------")
- # print("testing dyActual")
- # print(dyActualValues)
- # print(ddyActualValues)
-
- # print("testing dy and ddy from numdiff function")
- # print(dy)
- # print(ddy)
- # print("-------------------------")
- # print("-------------------------")
- # print("-------------------------")
-
-
 lw = 2 # define the linewidth
 plt.clf() # clears the plot (source: https://www.activestate.com/resources/quick-reads/how-to-clear-a-plot-in-python/)
 plt.plot(xValues,dy,linewidth=lw,label="dy") # plot the line for dy
@@ -186,13 +156,8 @@ plt.savefig("dyddytest.png")
 xValuesForMyFunction = [1,2,3,4,5,6,7,8,9,10]
 yValuesForMyFunction = []
 
- # print(f'length of xvalsforfun is {len(xValuesForMyFunction)}')
 for i in range(len(xValuesForMyFunction)):
     yValuesForMyFunction.append(myfunction(xValuesForMyFunction[i]))
-
- # print(f'length of yValesformyfunction is {len(yValuesForMyFunction)}')
- # for j in range(len(yValuesForMyFunction)):
-     # print(yValuesForMyFunction[j])
 
 dyForMyFunction, ddyForMyFunction = numdiff(1, yValuesForMyFunction)
 
@@ -203,7 +168,7 @@ plt.plot(xValuesForMyFunction,ddyForMyFunction,linewidth=lw,label="ddyForMyFunct
 plt.legend()
 plt.xlabel("x-Values From 0-10")
 plt.ylabel("dy|a & ddy|a for some x=a")
-plt.title("My Second Graph - 'dyddy'")
+plt.title("My Third Graph - 'dyddy'")
 # plt.show()
 plt.savefig("dyddy.png")
 
@@ -217,26 +182,14 @@ def findroot(function,x1,x2): # findroot: function, int, int -> float, int
     counter = 2 # initialises a counting variable which will count the number of iterations
     magnitude = False # initialise a magnitude variable which is set to false, indicating that the magnitude criteria has not been met yet
     hasConverged = False # a boolean which will determine the output sent to the user
-     # print("initial setup happens")
 
     while (counter <=20 and magnitude == False):
-         # print("This loop starts")
         nextX = ((x1 * function(x2)) - (x2 * function(x1)))/(function(x2) - function(x1))
-         # print(nextX)
-         # print(f"x1 is {x1}")
-         # print(x1)
-         # print(f"x2 is {x2}")
-         # print(x2)
-         # print("-------")
 
         x1 = x2 # the current value of x2 is now stored in x1
-         # print(f"x1 is {x1}")
         x2 = nextX # the next value of x is now stored in x2
-         # print(f"x2 is {x2}")
-         # print("------")
         nextX = 0
         counter = counter + 1 # adds one to the counter
-         # print(counter)
 
         value = abs(function(x2))
         if value <= 10e-6:
