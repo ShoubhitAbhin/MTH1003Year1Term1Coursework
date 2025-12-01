@@ -159,6 +159,9 @@ yValuesForMyFunction = []
 for i in range(len(xValuesForMyFunction)):
     yValuesForMyFunction.append(myfunction(xValuesForMyFunction[i]))
 
+for j in range(len(yValuesForMyFunction)):
+    print(yValuesForMyFunction[j])
+
 dyForMyFunction, ddyForMyFunction = numdiff(1, yValuesForMyFunction)
 
 lw = 2
@@ -170,7 +173,7 @@ plt.xlabel("x-Values From 0-10")
 plt.ylabel("dy|a & ddy|a for some x=a")
 plt.title("My Third Graph - 'dyddy'")
 # plt.show()
-plt.savefig("dyddy.png")
+plt.savefig("dyddyplot.png")
 
 
 # TASK 6: Write your findroot function
