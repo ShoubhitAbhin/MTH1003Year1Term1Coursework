@@ -45,7 +45,7 @@ def myID():
 """
 The following code creates the x and y value arrays.
 """
-x = np.arange(0,10.1,0.1) # from 0-10 inclusive in steps of 0.1
+x = np.arange(0,10.1,0.01) # from 0-10 inclusive in steps of 0.1
 y = myfunction(x)
 
 """
@@ -54,9 +54,9 @@ The following code creates a graph with linewidth lw and adds the x-axis, y-axis
 lw = 2
 plt.clf() # clears the plot (source: https://www.activestate.com/resources/quick-reads/how-to-clear-a-plot-in-python/)
 plt.plot(x,y,linewidth=lw)
-plt.xlabel("x-Values From 0-10")
+plt.xlabel("x")
 plt.ylabel("myfunction(x)")
-plt.title("My First Graph - 'yPlot'")
+plt.title("A Plot of myFunction")
 plt.savefig("yplot.png")
  # plt.show()
 
@@ -87,8 +87,8 @@ def numdiff(h, y):
     """
     dyFirstValue = (-y[2]+(4*y[1])-(3*y[0]))/(2*h)
     ddyFirstValue = (-y[3]+(4*y[2])-(5*y[1])+(2*y[0]))/(h**2)
-    dyLastValue = ((3*y[n])-(4*y[n-1])+y[n-2])/(2*h)
-    ddyLastValue = ((2*y[n])-(5*y[n-1])+(4*y[n-2])-y[n-3])/(h**2)
+    dyLastValue = ((3*y[numElements-1])-(4*y[numElements-2])+y[numElements-3])/(2*h)
+    ddyLastValue = ((2*y[numElements-1])-(5*y[numElements-2])+(4*y[numElements-3])-(y[numElements-4]))/(h**2)
     dy.insert(0,dyFirstValue)
     ddy.insert(0,ddyFirstValue)
     dy.append(dyLastValue)
@@ -99,14 +99,17 @@ def numdiff(h, y):
 # TASK 4: Test your numdiff function on a function of your choice
 
 """
-The following code creates a function g(x) which can be differentiated twice
+The following code creates a function h(x) which can be differentiated twice
 """
-def g(x):
-    # g(x): int -> int
-    # My function is g(x) = x^2 - 4x + 3, such that the roots where g(x)=0 are at x=1,3
-    return ((x**2) - (4*x) + 3)
 
-xValues = [1,2,3,4,5,6,7,8,9,10] # an array of predetermined x-values
+def g(x):
+    # my function is cos(x)
+    # g(x): reals -> [-1,1]
+    return np.cos(x) 
+
+hVal = 0.01 # the spacing between each consecutive x value, which is predetermined
+
+xValues = np.arange(0,10.1,hVal) # an array of predetermined x-values
 yValues = [] # an empty array which will be populated with the corresponding y-values
 
 """
@@ -114,8 +117,9 @@ The following loop populates the yValues array with the appropriate y values.
 """
 for n in range(len(xValues)):
     yValues.append(g(xValues[n]))
+
  
-dy, ddy = numdiff(1,yValues) # the return values of the numdiff function are stored in the variables dy and ddy respectively
+dy, ddy = numdiff(hVal,yValues) # the return values of the numdiff function are stored in the variables dy and ddy respectively
 
 """
 The following functions define the actual first and second derivatives for my function g(x)
@@ -123,16 +127,17 @@ The following functions define the actual first and second derivatives for my fu
 
 def dyActual(x):
     # dyActual: int -> int
-    return ((2*x) - 4)
+    return ((np.sin(x)) * -1)
 
 def ddyActual(x):
     # ddyActual: int -> int
-    return 2
+    return ((np.cos(x)) * -1)
 
 dyActualValues = [] # empty list which will be populated with the real values of dy (i.e. values of dy calculated using the known g'(x) for my function g(x) rather than numerically using the numdiff function)
 ddyActualValues = [] # empty list which will be populated with the real values of dy (i.e. values of ddy calculated using the known g''(x) for my function g(x) rather than numerically using the numdiff function)
 
-for a in range(len(xValues)): # this loop populated the dyActualValues and ddyActualValues list as described above
+
+for a in range(len(xValues)): # this loop populates the dyActualValues and ddyActualValues list as described above
     dyActualValues.append(dyActual(xValues[a]))
     ddyActualValues.append(ddyActual(xValues[a]))
 
@@ -141,34 +146,35 @@ lw = 2 # define the linewidth
 plt.clf() # clears the plot (source: https://www.activestate.com/resources/quick-reads/how-to-clear-a-plot-in-python/)
 plt.plot(xValues,dy,linewidth=lw,label="dy") # plot the line for dy
 plt.plot(xValues,ddy,linewidth=lw,label="ddy") # plot the line for ddy
-plt.plot(xValues,dyActualValues,linewidth=lw,label="dyActual",linestyle=":", color="k") # linestyle and colour to show the actual vs numdiff calculated lines when they overlap (source: https://www.geeksforgeeks.org/python/linestyles-in-matplotlib-python/)
-plt.plot(xValues,ddyActualValues,linewidth=lw,label="ddyActual",linestyle=":",color="b")
+plt.plot(xValues,dyActualValues,linewidth=lw,label="dyActual: g'(x)=-sin(x)",linestyle=":", color="k") # linestyle and colour to show the actual vs numdiff calculated lines when they overlap (source: https://www.geeksforgeeks.org/python/linestyles-in-matplotlib-python/)
+plt.plot(xValues,ddyActualValues,linewidth=lw,label="ddyActual: g''(x)=-cos(x)",linestyle=":",color="b")
 plt.xticks(np.arange(0, 11, step=1)) # add labels for every integer x between 0 and 10 (source: https://saturncloud.io/blog/how-to-set-xaxis-values-in-matplotlib-python-a-guide/#:~:text=To%20set%20the%20x%2Daxis,the%20labels%20for%20these%20ticks.&text=In%20this%20example%2C%20np.,with%20a%20step%20of%201.)
 plt.legend() # add a legend
-plt.xlabel("x-Values From 0-10")
+plt.xlabel("x")
 plt.ylabel("dy|a & ddy|a for some x=a")
-plt.title("My Second Graph - 'dyddytest'")
+plt.title("A Plot of the First & Second Derivatives of g(x)=cos(x)")
 # plt.show()
 plt.savefig("dyddytest.png")
 
 
 # TASK 5: Plotting f'(x) and f''(x) for the function f(x) given by myfunction
-xValuesForMyFunction = [1,2,3,4,5,6,7,8,9,10]
+hValForMyFunctionPlot = 0.1
+xValuesForMyFunction = np.arange(0,10.1,hValForMyFunctionPlot)
 yValuesForMyFunction = []
 
 for i in range(len(xValuesForMyFunction)):
     yValuesForMyFunction.append(myfunction(xValuesForMyFunction[i]))
 
-dyForMyFunction, ddyForMyFunction = numdiff(1, yValuesForMyFunction)
+dyForMyFunction, ddyForMyFunction = numdiff(hValForMyFunctionPlot, yValuesForMyFunction)
 
 lw = 2
 plt.clf() # clears the plot (source: https://www.activestate.com/resources/quick-reads/how-to-clear-a-plot-in-python/)
 plt.plot(xValuesForMyFunction,dyForMyFunction,linewidth=lw,label="dyForMyFunction")
 plt.plot(xValuesForMyFunction,ddyForMyFunction,linewidth=lw,label="ddyForMyFunction")
 plt.legend()
-plt.xlabel("x-Values From 0-10")
+plt.xlabel("x")
 plt.ylabel("dy|a & ddy|a for some x=a")
-plt.title("My Third Graph - 'dyddy'")
+plt.title("A Plot of the First & Second Derivatives of myFunction")
 # plt.show()
 plt.savefig("dyddyplot.png")
 
@@ -209,10 +215,14 @@ def findroot(function,x1,x2): # findroot: function, int, int -> float, int
 # TASK 7: Test your findroot function on a function of your choice 
 
 """
-Note: The function g(x) was defined earlier as g(x) = (x-3)(x-1) such that it has roots x=1,3
+Define a function h(x) which has at least one root
 """
 
-findroot(g,0.9,1.1)
+def h(x):
+    # let h(x) = x^2 - 4x + 3 = (x-3)(x-1), meaning it has roots at x=1,3
+    return ((x**2) - (4*x) + 3)
+
+findroot(h,0.9,1.1)
 """
 The output is: "The function has converged to the root 1.0000006611963688"
 """
@@ -221,7 +231,7 @@ The output is: "The function has converged to the root 1.0000006611963688"
 
 # TASK 8: Apply your findroot function to f(x) defined by myfunction
 
-findroot(myfunction,1,2)
+findroot(myfunction,1,3)
 """
-The output is: "The function has converged to the root 2.370640317019967"
+The output is: "The function has converged to the root 2.370640317019967". This seems correct as we can see from the yplot.png file that the function seems to have a value of 0 around the point x=2.3, which is close to the root we have found
 """
