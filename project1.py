@@ -159,9 +159,6 @@ yValuesForMyFunction = []
 for i in range(len(xValuesForMyFunction)):
     yValuesForMyFunction.append(myfunction(xValuesForMyFunction[i]))
 
-for j in range(len(yValuesForMyFunction)):
-    print(yValuesForMyFunction[j])
-
 dyForMyFunction, ddyForMyFunction = numdiff(1, yValuesForMyFunction)
 
 lw = 2
